@@ -15,7 +15,7 @@ import dataset
 class DbInitializerByMultiUsers(DbInitializer):
     def __init__(self, accountsDb):
 #    def __init__(self):
-        super().__init__()
+        #super().__init__()
         self.__accountsDb = accountsDb
         self.__filenames = {}
         self.__CreateFilenames()
@@ -25,8 +25,8 @@ class DbInitializerByMultiUsers(DbInitializer):
         print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', self.__accountsDb['Accounts'].count(), self.DbFilePath)
 
     def Initialize(self):
-        self._CreateDb()
-        self._ConnectDb()
+        self.__CreateDb()
+        self.__ConnectDb()
         for username in self.__GetUsernames(): self.Db[username].query('PRAGMA foreign_keys = false')
         #self.__CreateTable()
         #self.__InsertInitData()
@@ -39,16 +39,16 @@ class DbInitializerByMultiUsers(DbInitializer):
         #super().super().__InsertInitData()
         #super().__CreateTable()
         #super().__InsertInitData()
-        self._CreateTable()
-        self._InsertInitData()
+        self.__CreateTable()
+        self.__InsertInitData()
         for username in self.__GetUsernames(): self.Db[username].query('PRAGMA foreign_keys = true')
 
-    def _CreateDb(self):
+    def __CreateDb(self):
         for username in self.DbFileName:
             if not os.path.isfile(self.__filepaths[username]):
                 with open(self.__filepaths, 'w') as f: pass
 
-    def _ConnectDb(self):
+    def __ConnectDb(self):
         for username in self.DbFileName:
             self.__dbs[username] = dataset.connect('sqlite:///' + self.__filepaths[username])
 

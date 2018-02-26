@@ -11,7 +11,7 @@ import web.service.github.api.v3.Client
 from database.Database import Database as Db
 import cui.uploader.Main
 import web.log.Log
-import database.contributions.Main
+import database.init.Contributions.Main
 from setting.Config import Config
 #import setting.Setting
 import threading

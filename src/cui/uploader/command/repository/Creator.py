@@ -9,7 +9,7 @@ import pytz
 import requests
 import json
 #import setting.Setting
-from setting.Confing import Confing
+from setting.Config import Config
 from database.Database import Database as Db
 
 class Creator:

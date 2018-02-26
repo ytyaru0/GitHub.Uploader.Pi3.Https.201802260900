@@ -11,38 +11,38 @@ import glob
 # 抽象クラス
 class DbInitializer(metaclass=ABCMeta):
     def __init__(self):
-        self._path_dir_root = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
+        self.__path_dir_root = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
         #self.__setting = setting.Setting.Setting()
-        self._path_dir_this = os.path.abspath(os.path.dirname(__file__))
+        self.__path_dir_this = os.path.abspath(os.path.dirname(__file__))
         self.__db = None
 
     def Initialize(self):
-        self._CreateDb()
-        self._ConnectDb()
+        self.__CreateDb()
+        self.__ConnectDb()
         self.Db.query('PRAGMA foreign_keys = false')
-        self._CreateTable()
-        self._InsertInitData()
+        self.__CreateTable()
+        self.__InsertInitData()
         self.Db.query('PRAGMA foreign_keys = true')
 
     #@abstractmethod
-    def _CreateDb(self):
+    def __CreateDb(self):
         print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
         print(self.DbFilePath)
         if not os.path.isfile(self.DbFilePath):
             with open(self.DbFilePath, 'w') as f: pass
 
-    def _ConnectDb(self):
+    def __ConnectDb(self):
         self.__class__.Db = dataset.connect('sqlite:///' + self.DbFilePath)
 
     # テーブル作成（CreateTable文）
     #@abstractmethod
-    def _CreateTable(self):
+    def __CreateTable(self):
         self.__CreateTableBySql()
         self.__CreateTableByPy()
 
     # 初期値の挿入（Insert文）
     #@abstractmethod
-    def _InsertInitData(self):
+    def __InsertInitData(self):
         self.__InsertBySql()
         self.__InsertByTsv()
         self.__InsertByPy()
@@ -97,7 +97,7 @@ class DbInitializer(metaclass=ABCMeta):
     def __InsertByPy(self):
         self.__ActionByPy(action='insert')
         """
-        #path_insert_py = os.path.join(self._path_dir_root, 'database/init/{0}/insert/py/'.format(self.DbId))
+        #path_insert_py = os.path.join(self.__path_dir_root, 'database/init/{0}/insert/py/'.format(self.DbId))
         path_root = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))))
         path_insert_py = os.path.join(path_root, 'database/init/{0}/insert/py/'.format(self.DbId))
         if os.path.isdir(path_insert_py):
@@ -166,17 +166,17 @@ class DbInitializer(metaclass=ABCMeta):
 
     # パス取得（テーブル作成用SQLファイル）
     def __GetCreateTableSqlFilePaths(self):
-        path = os.path.join(self._path_dir_this, self.DbId, 'create', 'table', 'sql')
+        path = os.path.join(self.__path_dir_this, self.DbId, 'create', 'table', 'sql')
         for path_sql in glob.glob(os.path.join(path + '*.sql')): yield path_sql
 
     # パス取得（初期値挿入用TSVファイル）
     def __GetInsertTsvFilePaths(self):
-        path = os.path.join(self._path_dir_this, self.DbId, 'insert', 'tsv')
+        path = os.path.join(self.__path_dir_this, self.DbId, 'insert', 'tsv')
         for path_tsv in glob.glob(os.path.join(path + '*.tsv')): yield path_tsv
 
     # パス取得（初期値挿入用SQLファイル）
     def __GetInsertSqlFilePaths(self):
-        path = os.path.join(self._path_dir_this, self.DbId, 'insert', 'sql')
+        path = os.path.join(self.__path_dir_this, self.DbId, 'insert', 'sql')
         for path_tsv in glob.glob(os.path.join(path + '*.sql')): yield path_tsv
 
     # SQLファイル発行
@@ -214,12 +214,12 @@ class DbInitializer(metaclass=ABCMeta):
     """
     # パス取得（テーブル作成用SQLファイル）
     def __GetCreateTableSqlFilePaths(self, dbname):
-        path = os.path.join(self._path_dir_this, dbname, 'sql', 'create')
+        path = os.path.join(self.__path_dir_this, dbname, 'sql', 'create')
         for path_sql in glob.glob(os.path.join(path + '*.sql')): yield path_sql
 
     # パス取得（初期値挿入用TSVファイル）
     def __GetInsertTsvFilePaths(self, dbname):
-        path = os.path.join(self._path_dir_this, dbname, 'tsv')
+        path = os.path.join(self.__path_dir_this, dbname, 'tsv')
         for path_tsv in glob.glob(os.path.join(path + '*.tsv')): yield path_tsv
         return self.__dbs[dbname]
 
